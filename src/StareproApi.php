@@ -37,34 +37,40 @@ class StareproApi
     /**
      * @throws StareproApiException
      */
-    public function ping(){
-        try{
+    public function ping()
+    {
+        try {
             $response = $this->client->get("/ping");
 
             return \GuzzleHttp\json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-        } catch (\HttpException $httpException){
+        } catch (\HttpException $httpException) {
             throw StareproApiException::httpFailed($httpException);
-        } catch (\InvalidArgumentException $invalidArgumentException){
+        } catch (\InvalidArgumentException $invalidArgumentException) {
             throw StareproApiException::invalidResponse();
         }
     }
 
-    public function ftpAuth($username, $password){
+    public function ftpAuth($username, $password)
+    {
         try {
             $response = $this->client->post("/ftp/auth", [
                 'form_params' => [
                     'username' => $username,
-                    'password' => $password
+                    'password' => $password,
+                    'encrypted' => $encrypted,
+                    'local_ip' => $localIp,
+                    'local_port' => $localPort,
+                    'remote_ip' => $remoteIp,
                 ]
             ]);
 
             return \GuzzleHttp\json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-        } catch (ClientException $e){
-            if($e->getResponse()->getStatusCode() === 403){
+        } catch (ClientException $e) {
+            if ($e->getResponse()->getStatusCode() === 403) {
                 throw StareproApiException::resourceNotPermittedException();
-            } else if($e->getResponse()->getStatusCode() === 401){
+            } else if ($e->getResponse()->getStatusCode() === 401) {
                 throw StareproApiFtpException::notAuthorized();
-            } else{
+            } else {
                 throw StareproApiException::invalidResponse();
             }
         } catch (TransferException $exception) {
