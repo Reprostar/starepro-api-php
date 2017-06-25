@@ -50,7 +50,7 @@ class StareproApi
         }
     }
 
-    public function ftpAuth($username, $password)
+    public function ftpAuth($username, $password, $encrypted = null, $localIp = null, $localPort = null, $remoteIp = null)
     {
         try {
             $response = $this->client->post("/ftp/auth", [
