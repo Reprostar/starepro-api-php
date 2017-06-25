@@ -52,7 +52,7 @@ class StareproApi
     public function ftpAuth($username, $password){
         try {
             $response = $this->client->post("/ftp/auth", [
-                'json' => [
+                'form_params' => [
                     'username' => $username,
                     'password' => $password
                 ]
